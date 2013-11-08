@@ -1,5 +1,51 @@
 #!/usr/bin/python
 
+### Use InputData(directory_path(defalut: ''), dataset(defalut: 'beetle')) to make an instance,
+##  Then call InputData.readFile(file_name, dataset(defalut is 'beetle')) to read file.
+##  file_name should not include path if directory_path is already set.
+##
+##  The output is a dictionary, according to dataset
+##  For 'beetle':
+##      the dictionary is
+##          { 'id' -> question id,
+##            'text' -> question text,
+##            'referenceAnswers' -> [ 0 : { 'id' -> reference answer id
+##                                          'category' -> reference answer category(Best/Minimal)
+##                                          'text' -> reference answer text
+##                                          'studentAnswers' -> [ 0 : { 'id' -> student answer id
+##                                                                      'accuracy' -> the accuracy for this reference answer
+##                                                                      'text' -> student answer text
+##                                                                    }
+##                                                                1 : ...
+##                                                              ]
+##                                        }
+##                                    1 : ...
+##                                  ]
+##            'otherStudentAnswers' -> [ 0 : { 'id' -> student answer id
+##                                             'accuracy' -> the accuracy for this reference answer
+##                                             'text' -> student answer text
+##                                           }
+##                                       1 : ...
+##                                     ]
+##          }
+##
+##  For 'seb'
+##      the dictionary is
+##          { 'id' -> question id,
+##            'text' -> question text,
+##            'referenceAnswer' -> { 'id' -> reference answer id
+##                                   'text' -> reference answer text
+##                                 }
+##            'studentAnswers' -> [ 0 : { 'id' -> student answer id
+##                                        'accuracy' -> the accuracy for this reference answer
+##                                        'text' -> student answer text
+##                                      }
+##                                  1 : ...
+##                                ]
+##          }
+
+
+
 import os
 from xml.etree import ElementTree
 
