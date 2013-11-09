@@ -43,13 +43,17 @@ class LSA(object):
         for i, k in enumerate(self.keys):
             for d in self.wdict[k]:
                 self.A[i,d] += 1
+
     def calc(self):
         self.U, self.S, self.Vt = svd(self.A,full_matrices=False)
-        self.formatS()
+        self.formatS(3)
 
-    def formatS(self):
+    def formatS(self,num_dimension):
+        if num_dimension>len(self.S):
+            num_dimension=len(self.S)
+
         self.temp=zeros([len(self.S),len(self.S)])
-        for i in range(0,len(self.S)):
+        for i in range(0,num_dimension):
             self.temp[i,i]=self.S[i]
 
 
@@ -81,7 +85,7 @@ mylsa.calc()
 he=dot(dot(mylsa.U,mylsa.temp),mylsa.Vt)
 print he[:,0:1]
 print transpose(he)[3:4,:]
-print dot(transpose(he)[3:4,:],he[:,0:1])
+print dot(transpose(he)[1:2,:],he[:,0:1])
 #print dot(he[:,0:1],transpose(he)[1:2,:])
 
 
