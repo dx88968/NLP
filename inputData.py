@@ -5,7 +5,7 @@ from xml.etree import ElementTree
 
 class InputData(object):
 
-    def __init__(self, path = '', dataset = 'beetle'):
+    def __init__(self, path = '', dataset):
         self.path = path
         self.question = {}
         self.dataset = dataset.lower()
@@ -13,9 +13,15 @@ class InputData(object):
     def readDict(self, dict_path):
         pass
 
-    def readFile(self, file_path, dataset = 'beetle'):
-        self.dataset = dataset.lower()
-        self.file = file_path
+    def readFile(self, file_name):
+        # self.dataset = dataset.lower()
+        # I think one instance only for one kind dataset may be better
+        # or it will be a little confusing.
+        self.file = file_name
+        
+        # reset question, let the instance resueable.
+        self.question = {}
+
         if not os.path.isfile(self.path + self.file):
             print 'File not exist!'
         else:
@@ -25,11 +31,11 @@ class InputData(object):
             self.question['text'] = self.root[0].text
             
             if self.dataset == 'beetle':
-                self.readBeetle()
+                return self._readBeetle()
             else:
-                self.readSeb()
+                return self._readSeb()
             
-    def readBeetle(self):
+    def _readBeetle(self):
         self.question['referenceAnswers'] = []
         for ans in self.root[1]:
             each_ref_ans = {}
@@ -62,7 +68,7 @@ class InputData(object):
         #print len(self.question['referenceAnswers'])
         return self.question
 
-    def readSeb(self):
+    def _readSeb(self):
         self.question['referenceAnswer'] = {}
         self.question['referenceAnswer']['id'] = self.root[1][0].attrib['id']
         self.question['referenceAnswer']['text'] = self.root[1][0].text
@@ -82,5 +88,5 @@ if __name__ == '__main__':
     #model = InputData('SemEval/train/beetle/Core/')
     #model.readFile('FaultFinding-BULB_C_VOLTAGE_EXPLAIN_WHY1.xml')
     #model.readFile('FaultFinding-BULB_C_VOLTAGE_EXPLAIN_WHY2.xml')
-    model = InputData('SemEval/train/seb/Core/')
-    model.readFile('EM-inv1-45b.xml', 'seb')
+    model = InputData('SemEval/train/seb/Core/', 'seb')
+    model.readFile('EM-inv1-45b.xml')
