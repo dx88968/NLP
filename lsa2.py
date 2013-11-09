@@ -1,6 +1,6 @@
 from numpy import zeros
 from scipy.linalg import svd
-from scipy import dot
+from scipy import dot, mat
 from scipy import transpose
 #following needed for TFIDF
 from math import log
@@ -56,6 +56,19 @@ class LSA(object):
         for i in range(0,num_dimension):
             self.temp[i,i]=self.S[i]
 
+    def get_usv(self, num_dimension):
+        """
+        return matrix of s,u,v in a new dimentsion
+        """
+        if num_dimension > len(self.S):
+            num_dimension = len(self.S)
+        s = mat(zeros([num_dimension, num_dimension]))
+        for i in range(num_dimension):
+            s[i,i] = self.S[i]
+        u = mat(self.U[:,0:num_dimension])
+        v = mat(self.Vt[0:num_dimension, :])
+        return (u, s, v)
+
 
     def TFIDF(self):
         WordsPerDoc = sum(self.A, axis=0)        
@@ -74,18 +87,21 @@ class LSA(object):
         print -1*self.U[:, 0:3]
         print 'Here are the first 3 rows of the Vt matrix'
         print -1*self.Vt[0:3, :]
+def test():
+    mylsa = LSA(stopwords, ignorechars)
+    for t in titles:
+        mylsa.parse(t)
+    mylsa.build()
+    mylsa.printA()
+    mylsa.calc()
+    #mylsa.printSVD()
+    he=dot(dot(mylsa.U,mylsa.temp),mylsa.Vt)
+    print he[:,0:1]
+    print transpose(he)[3:4,:]
+    print dot(transpose(he)[1:2,:],he[:,0:1])
+    #print dot(he[:,0:1],transpose(he)[1:2,:])
 
-mylsa = LSA(stopwords, ignorechars)
-for t in titles:
-    mylsa.parse(t)
-mylsa.build()
-mylsa.printA()
-mylsa.calc()
-#mylsa.printSVD()
-he=dot(dot(mylsa.U,mylsa.temp),mylsa.Vt)
-print he[:,0:1]
-print transpose(he)[3:4,:]
-print dot(transpose(he)[1:2,:],he[:,0:1])
-#print dot(he[:,0:1],transpose(he)[1:2,:])
+if __name__ == "__main__":
+    test()
 
 

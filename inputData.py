@@ -51,7 +51,7 @@ from xml.etree import ElementTree
 
 class InputData(object):
 
-    def __init__(self, path = '', dataset):
+    def __init__(self, dataset, path = ''):
         self.path = path
         self.question = {}
         self.dataset = dataset.lower()
@@ -78,8 +78,41 @@ class InputData(object):
             
             if self.dataset == 'beetle':
                 return self._readBeetle()
-            else:
+            elif self.dataset == "seb":
                 return self._readSeb()
+            else:
+                raise Exception("Wrong dataset")
+    def read(self, file_name):
+        """
+            return general data structure for all data set
+        """
+        self.readFile(file_name)
+        rsl = {}
+        if self.dataset == "beetle":
+            rsl["text"] = self.question["text"]
+            rsl["id"] = self.question["id"]
+            rsl["references"] = [ 
+                    {   "text":r["text"], 
+                        'category':r['category'], 
+                        "id":r["id"]} 
+                    for r in self.question["referenceAnswers"] ]
+            rsl["student_answers"] = []
+            for r in self.question["referenceAnswers"]:
+                for a in r["studentAnswers"]:
+                    rsl["student_answers"].append({
+                        "text":a["text"],
+                        "id":a["id"],
+                        "accuracy":a["accuracy"]})
+            for a in self.question["otherStudentAnswers"]:
+                rsl["student_answers"].append({
+                    "text":a["text"],
+                    "id":a["id"],
+                    "accuracy":a["accuracy"]})
+            return rsl
+        elif self.dataset == "seb":
+            pass
+        else:
+            raise Exception("Wrong dataset")
             
     def _readBeetle(self):
         self.question['referenceAnswers'] = []
@@ -134,5 +167,5 @@ if __name__ == '__main__':
     #model = InputData('SemEval/train/beetle/Core/')
     #model.readFile('FaultFinding-BULB_C_VOLTAGE_EXPLAIN_WHY1.xml')
     #model.readFile('FaultFinding-BULB_C_VOLTAGE_EXPLAIN_WHY2.xml')
-    model = InputData('SemEval/train/seb/Core/', 'seb')
+    model = InputData("seb",'SemEval/train/seb/Core/')
     model.readFile('EM-inv1-45b.xml')

@@ -2,6 +2,7 @@ import lsa2
 import numpy
 from numpy import zeros
 from numpy import mat
+from numpy import dot
 import numpy.linalg as linalg
 import inputData
 
@@ -19,14 +20,16 @@ class grading(object):
         self._lsa.build()
         self._lsa.calc()
 
-        self.U = self._lsa.U
-        self.Si = mat(self._lsa.S).I
+        self.U, self.S, self.V = self._lsa.get_usv(5)
+        self.Si = self.S.I
 
     def grade(self, answer):
         """
             return grade for one answer, 
             answer should be a stirng.
         """
+
+        # construct a sudo-document for student answer
         count = {}
         for w in answer.split():
             if w in count:
@@ -37,15 +40,16 @@ class grading(object):
         for i,k in enumerate(self._lsa.keys):
             if k in count:
                 q[i] = count[k]
-        dq = q * self.U * self.Si
-        print q
-
+        qd = dot(dot(q.T, self.U), self.Si)
+        #
         grade = []
-        for idoc in range(len(self._lsa.A[0])):
-            d = self._lsa.A[:,idoc]
-            d = numpy.mat(d)
-            dd = d * self.U * self.Si
-            grade.append(self.sim(dq, dd))
+        # dimension reduction of A
+        d = dot(dot(self.U, self.S), self.V)
+
+        # compare the student answet to each reference answer in A
+        for i in range(d.shape[1]):
+            dd = d[:,i].T * self.U * self.Si
+            grade.append(self.sim(qd, dd))
         return grade
 
     def sim(self, a, b):
@@ -53,18 +57,30 @@ class grading(object):
             Cosine similarity
             a,b : numpy.array
         """
+        if isinstance(a, numpy.matrix):
+            a = numpy.array(a)[0]
+        if isinstance(b, numpy.matrix):
+            b = numpy.array(b)[0]
         num = sum(a *b)
         deno = linalg.norm(a) * linalg.norm(b)
         
         return num/deno
-p = inputData.InputData('../SemEval/train/beetle/Core/', "beetle")
-problem = p.readFile('FaultFinding-BULB_C_VOLTAGE_EXPLAIN_WHY1.xml')
 
-references = [r["text"] for r in problem["referenceAnswers"]]
-student = problem["otherStudentAnswers"][0]["text"]
-for r in references:
-    print r
-print "\n"
-print student
-g = grading(references)
-print g.grade(student)
+def test():
+    p = inputData.InputData("beetle", '../SemEval/train/beetle/Core/' )
+    problem = p.readFile('FaultFinding-BULB_C_VOLTAGE_EXPLAIN_WHY1.xml')
+
+    references = [r["text"] for r in problem["referenceAnswers"]]
+    student = problem["otherStudentAnswers"][0]["text"]
+
+    print "references"
+    for r in references:
+        print r
+    print "\n"
+    print "Student answer"
+    print student
+    g = grading(references)
+    print g.grade(student)
+
+if __name__ == "__main__":
+    test()
