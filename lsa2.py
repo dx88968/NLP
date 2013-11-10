@@ -46,6 +46,8 @@ class LSA(object):
             for d in self.wdict[k]:
                 self.A[i,d] += 1
 
+        self.TFIDF()
+
     def calc(self):
         self.U, self.S, self.Vt = svd(self.A,full_matrices=False)
         self.formatS(3)
@@ -100,7 +102,7 @@ def test():
     he=dot(dot(mylsa.U,mylsa.temp),mylsa.Vt)
     print he[:,0:1]
     print transpose(he)[3:4,:]
-    print dot(transpose(he)[1:2,:],he[:,0:1])
+    print dot(transpose(he)[5:6,:],he[:,0:1])
     #print dot(he[:,0:1],transpose(he)[1:2,:])
 
 if __name__ == "__main__":
