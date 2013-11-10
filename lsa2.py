@@ -37,7 +37,9 @@ class LSA(object):
                 self.wdict[w] = [self.dcount]
         self.dcount += 1      
     def build(self):
-        self.keys = [k for k in self.wdict.keys() if len(self.wdict[k]) > 1]
+        # change the len(self.wdict[k]) >1 to >0
+
+        self.keys = [k for k in self.wdict.keys() if len(self.wdict[k]) > 0]
         self.keys.sort()
         self.A = zeros([len(self.keys), self.dcount])
         for i, k in enumerate(self.keys):

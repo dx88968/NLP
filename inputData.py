@@ -68,10 +68,10 @@ class InputData(object):
         # reset question, let the instance resueable.
         self.question = {}
 
-        if not os.path.isfile(self.path + self.file):
+        if not os.path.isfile( os.path.join(self.path, self.file)):
             print 'File not exist!'
         else:
-            self.document = ElementTree.parse(self.path + self.file)
+            self.document = ElementTree.parse( os.path.join(self.path, self.file))
             self.root = self.document.getroot()
             self.question['id'] = self.root.attrib['id']
             self.question['text'] = self.root[0].text
@@ -85,6 +85,21 @@ class InputData(object):
     def read(self, file_name):
         """
             return general data structure for all data set
+            {
+                "text": question
+                "id": id
+                "references" = [
+                        {"text":reference
+                         "category": category
+                         "id":id
+                        }, ...]
+                "student_answers":[
+                        { "text": "",
+                          "id": id
+                          "accuracy":
+                        }, ...]
+            
+            }
         """
         self.readFile(file_name)
         rsl = {}
@@ -110,7 +125,11 @@ class InputData(object):
                     "accuracy":a["accuracy"]})
             return rsl
         elif self.dataset == "seb":
-            pass
+            rsl["text"] = self.question["text"]
+            rsl["id"] = self.question["id"]
+            rsl["references"] = [self.question["referenceAnswer"]]
+            rsl["references"][0]["category"] =""
+            rsl["student_answers"] = self.question["studentAnswers"]
         else:
             raise Exception("Wrong dataset")
             

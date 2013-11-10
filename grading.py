@@ -12,6 +12,9 @@ class grading(object):
         and return grade for answer.
     """
     def __init__(self, references):
+        """
+            references: ["ref1 string", "", ...]
+        """
         stopwords = ['and','for','in','little','of','the','to']
         ignorechars = ''',.?:'!'''
         self._lsa = lsa2.LSA(stopwords, ignorechars)
@@ -21,12 +24,12 @@ class grading(object):
         self._lsa.calc()
 
         self.U, self.S, self.V = self._lsa.get_usv(5)
-        self.Si = self.S.I
+        self.Si = (self.S+0.001).I
 
     def grade(self, answer):
         """
+            answer: a string
             return grade for one answer, 
-            answer should be a stirng.
         """
 
         # construct a sudo-document for student answer
