@@ -46,7 +46,7 @@ class LSA(object):
             for d in self.wdict[k]:
                 self.A[i,d] += 1
 
-        self.TFIDF()
+        #self.TFIDF()
 
     def calc(self):
         self.U, self.S, self.Vt = svd(self.A,full_matrices=False)
