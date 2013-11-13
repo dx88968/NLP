@@ -62,7 +62,6 @@ class basic_lsa(object):
         way5 = ["non_domain", "irrelevant", "contradictory", 
                 "partially_correct_incomplete", "correct"]
         point = max(points)
-        print point
         if self.mode == 2:
             if point < self.modes[2][0]:
                 return way2[0]

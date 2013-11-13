@@ -130,6 +130,7 @@ class InputData(object):
             rsl["references"] = [self.question["referenceAnswer"]]
             rsl["references"][0]["category"] =""
             rsl["student_answers"] = self.question["studentAnswers"]
+            return rsl
         else:
             raise Exception("Wrong dataset")
             
@@ -186,5 +187,5 @@ if __name__ == '__main__':
     #model = InputData('SemEval/train/beetle/Core/')
     #model.readFile('FaultFinding-BULB_C_VOLTAGE_EXPLAIN_WHY1.xml')
     #model.readFile('FaultFinding-BULB_C_VOLTAGE_EXPLAIN_WHY2.xml')
-    model = InputData("seb",'SemEval/train/seb/Core/')
+    model = InputData("seb",'../SemEval/train/seb/Core/')
     model.readFile('EM-inv1-45b.xml')
