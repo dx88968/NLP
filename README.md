@@ -3,13 +3,18 @@ NLP
 Please read http://blog.csdn.net/yangliuy/article/details/8330640, I find it rather interesting.
 
 ###First work version
+run.py method dataset_type data_path model output
 
-evaluation.py dataset_type path mode output
+* Method: lsa or plsa
+* Dataset types: beetle or seb
+* Model: 2 3 or 5
 
 <code>
-python evaluation.py beetle ../SemEval/train/beetle/Core/ 3 o.test
+python run.py plsa beetle ../SemEval/train/beetle/Core/ 3 o.test
 </code>
 
-Adout WSD before LSA/pLSA, There are 2 options:
-1. Considering Semantic info for each word: http://svn.ask.it.usyd.edu.au/trac/candc/wiki/boxer
-2. Replace 同义词、反义词 to a semantic space:http://blog.sina.cn/dpool/blog/s/blog_630aa24f01010xbb.html
+###Adout WSD before LSA/pLSA
+There are 2 options:
+ 
+* Considering Semantic info for each word: http://svn.ask.it.usyd.edu.au/trac/candc/wiki/boxer
+* Replace 同义词、反义词 to a semantic space:http://blog.sina.cn/dpool/blog/s/blog_630aa24f01010xbb.html
