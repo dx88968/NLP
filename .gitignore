@@ -1,6 +1,7 @@
 #################
 ## Eclipse
 #################
+*.txt
 .idea/
 *.test
 *.pydevproject

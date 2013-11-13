@@ -83,5 +83,5 @@ class basic_lsa(object):
 
 
 if __name__ == "__main__":
-    basci = basic_lsa("beetle", "../SemEval/train/beetle/Core/", 5, "out2.test")
+    basci = basic_lsa("beetle", "../SemEval/train/beetle/Core/", 5, "out.plsa.txt")
     basci.run()
