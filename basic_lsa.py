@@ -20,9 +20,9 @@ class basic_lsa(object):
             output_filename: "filename"
         """
         self.modes={
-                2: [0.75],
-                3: [0.35, 0.75],
-                5: [0, 0.25, 0.5, 0.75]
+                2: [0.7],
+                3: [0.65, 0.75],
+                5: [0.5, 0.6, 0.75, 0.85]
                 }
         self.dataset_type = dataset_type
         self.path = path
